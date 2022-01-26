@@ -1,22 +1,51 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// The `/api/products` endpoint
-
 // get all products
-router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.findAll();
+    res.json(products);
+  } catch (e) {
+    res.json(e);
+  }
 });
 
 // get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
+router.get('/:id', async (req, res) => {
+  try {
+    const products = await Product.findByPk(req.params.id);
+    res.json(products);
+  } catch (e) {
+    res.json(e);
+  }
   // be sure to include its associated Category and Tag data
 });
 
 // create new product
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  const { 
+    product_name,
+    price,
+    stock,
+    category_id,
+  } = req.body;
+
+  if(!product_name || !price || !stock) {
+    return res.status(400).json({ error: 'You must provide a product name, price and stock'});
+  }
+
+  try {
+    const newProduct = await Product.create({
+      product_name,
+      price,
+      stock,
+      category_id,
+    });
+    res.json(newProduct);
+  } catch (e) {
+    res.json(e);
+  }
   /* req.body should look like this...
     {
       product_name: "Basketball",
@@ -89,8 +118,18 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleteProduct = await Product.findById(req.params.id);
+    await Product.destroy({
+      where: {
+        id: req.params.id,
+      }
+    });
+    res.json(deleteProduct);
+  } catch (e) {
+    res.json(e);
+  }
 });
 
 module.exports = router;
