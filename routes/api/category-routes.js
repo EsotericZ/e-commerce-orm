@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const deletedCategory = await Category.findByPk(req.params.id);
     await Category.destroy({
