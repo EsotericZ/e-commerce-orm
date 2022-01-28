@@ -1,25 +1,32 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// get all products
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.findAll();
+    const products = await Product.findAll({
+      include: [
+        {model: Category},
+        { model: Tag },
+      ],
+    });
     res.json(products);
   } catch (e) {
     res.json(e);
   }
 });
 
-// get one product
 router.get('/:id', async (req, res) => {
   try {
-    const products = await Product.findByPk(req.params.id);
+    const products = await Product.findByPk(req.params.id, {
+      include: [
+        { model: Category },
+        { model: Tag },
+      ],
+    });
     res.json(products);
   } catch (e) {
     res.json(e);
   }
-  // be sure to include its associated Category and Tag data
 });
 
 // create new product
