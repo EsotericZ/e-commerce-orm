@@ -11,7 +11,15 @@ Using existing code, created the back end object-relational mapping to make Sequ
 - [Questions](#Questions)
 
 ## Installation
-Inquirer, mysql2 and console.table are required to run the app
+dotenv, express, mysql2 and sequelize are required to run the app
+
+Enviroment Variables Required  
+Create a .env file with the following:  
+```
+DB_NAME=ecommerce_db
+DB_USER=root
+DB_PASS=password
+```
       
 ## Usage
 Creating a database that can add, delete and update products, tags and categories for a company.  
